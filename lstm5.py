@@ -3,7 +3,7 @@ from datetime import datetime
 from numpy import array, ndarray
 import numpy as np
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, Flatten, TimeDistributed
+from keras.layers import CuDNNLSTM, LSTM, Dense, Flatten, TimeDistributed
 from keras.layers.convolutional import Conv1D, MaxPooling1D
 from pandas import read_csv
 import matplotlib.pyplot as plt
@@ -144,9 +144,9 @@ class Job:
         self.model.add(TimeDistributed(Flatten()))
 
         for _ in range(self.h_layer):
-            self.model.add(LSTM(self.units, activation="relu", return_sequences=True))
+            self.model.add(CuDNNLSTM(self.units, return_sequences=True))
 
-        self.model.add(LSTM(self.units, activation="relu"))
+        self.model.add(CuDNNLSTM(self.units))
         self.model.add(Dense(1))
         self.model.compile(optimizer=self.optimizer, loss="mse")
 
